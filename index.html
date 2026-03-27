@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiringPro - HR Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Decorators -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Login Screen -->
+    <div id="login-container" class="login-container active">
+        <div class="login-card">
+            <div class="login-image"></div>
+            <div class="login-content">
+                <div class="logo justify-center mb-6">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>HiringPro</span>
+                </div>
+                <h2>Acceso Reclutadores</h2>
+                <p class="text-muted mb-0" style="color: var(--text-muted); font-size: 14px;">Ingresa tus credenciales</p>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="login-email" class="form-control" placeholder="nombre@empresa.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 justify-center" style="margin-top: 16px;">Ingresar al Dashboard</button>
+                </form>
+                <p style="margin-top: 24px; font-size: 12px; color: var(--text-muted);">Por ahora (Demo): Ingresa cualquier dato.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-container" class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>HiringPro</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="nav-list">
+                    <li><button class="nav-btn active" data-view="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button></li>
+                    <li><button class="nav-btn" data-view="candidates"><i class="fa-solid fa-users"></i> Candidatos</button></li>
+                    <li><button class="nav-btn" data-view="interviews"><i class="fa-solid fa-calendar-check"></i> Entrevistas</button></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-btn" data-view="settings"><i class="fa-solid fa-gear"></i> Configuración</button>
+                <button class="nav-btn logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Buscar candidatos, habilidades...">
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                    <div class="user-profile">
+                        <div class="avatar">R</div>
+                        <span class="user-name">Reclutador</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="view-container">
+                <!-- Dashboard View -->
+                <section id="view-dashboard" class="view-section active">
+                    <div class="page-header">
+                        <h2>Panel General</h2>
+                        <p>Resumen de reclutamiento</p>
+                    </div>
+                    
+                    <!-- KPI Cards -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
+                            <div class="kpi-details">
+                                <span class="kpi-value">24</span>
+                                <span class="kpi-label">Candidatos Activos</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon blue"><i class="fa-solid fa-calendar-check"></i></div>
+                            <div class="kpi-details">
+                                <span class="kpi-value">8</span>
+                                <span class="kpi-label">Entrevistas Pendientes</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon green"><i class="fa-solid fa-clipboard-check"></i></div>
+                            <div class="kpi-details">
+                                <span class="kpi-value">12</span>
+                                <span class="kpi-label">Contratados</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Candidates View -->
+                <section id="view-candidates" class="view-section">
+                    <div class="page-header">
+                        <h2>Gestión de Candidatos</h2>
+                        <button class="btn btn-primary" id="btn-add-candidate"><i class="fa-solid fa-plus"></i> Nuevo Candidato</button>
+                    </div>
+
+                    <div class="filters-bar">
+                        <select class="form-control filter-select">
+                            <option value="">Todos los estados</option>
+                            <option value="aplicado">Aplicado</option>
+                            <option value="entrevista">Entrevista</option>
+                            <option value="contratado">Contratado</option>
+                        </select>
+                        <select class="form-control filter-select">
+                            <option value="">Score (Mayor a Menor)</option>
+                            <option value="asc">Score (Menor a Mayor)</option>
+                        </select>
+                    </div>
+
+                    <div class="candidates-grid" id="candidates-grid">
+                        <div class="content-panel" style="grid-column: 1 / -1;">
+                            <p class="empty-state">No hay candidatos para mostrar. Agrega el primero.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interviews View -->
+                <section id="view-interviews" class="view-section">
+                    <div class="page-header">
+                        <h2>Entrevistas Programadas</h2>
+                        <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Agendar Entrevista</button>
+                    </div>
+                    
+                    <div class="content-panel glass-panel">
+                        <div class="interviews-list">
+                            <div class="interview-item">
+                                <div class="interview-time">
+                                    <span class="time-day">28</span>
+                                    <span class="time-month">MAR</span>
+                                </div>
+                                <div class="interview-details">
+                                    <h4>Entrevista Técnica: Ana García</h4>
+                                    <p><i class="fa-regular fa-clock"></i> 10:00 AM - 11:30 AM | <i class="fa-solid fa-video"></i> Link de Google Meet</p>
+                                </div>
+                                <div class="interview-actions">
+                                    <button class="btn btn-outline">Unirse</button>
+                                </div>
+                            </div>
+                            <div class="interview-item">
+                                <div class="interview-time">
+                                    <span class="time-day">30</span>
+                                    <span class="time-month">MAR</span>
+                                </div>
+                                <div class="interview-details">
+                                    <h4>Evaluación Cultural: Carlos Ruiz</h4>
+                                    <p><i class="fa-regular fa-clock"></i> 02:00 PM - 02:45 PM | <i class="fa-solid fa-building"></i> Oficina Central</p>
+                                </div>
+                                <div class="interview-actions">
+                                    <button class="btn btn-outline">Unirse</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Settings View -->
+                <section id="view-settings" class="view-section">
+                    <div class="page-header">
+                        <h2>Configuración</h2>
+                    </div>
+                    <div class="content-panel">
+                        <h3>Conexión Supabase</h3>
+                        <p>Configura las credenciales de tu base de datos aquí.</p>
+                        <!-- Form for settings later -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Candidate Modal -->
+    <div class="modal" id="candidate-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Añadir Candidato</h3>
+                <button class="icon-btn close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="candidate-form">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="text" class="form-control" name="telefono">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Años de Experiencia</label>
+                            <input type="number" class="form-control" name="experiencia" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select class="form-control" name="estado">
+                                <option value="aplicado">Aplicado</option>
+                                <option value="entrevista">Entrevista</option>
+                                <option value="contratado">Contratado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Habilidades Clave (separadas por coma)</label>
+                        <input type="text" class="form-control" name="skills" placeholder="Ej: React, Node.js, Liderazgo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Enlace CV u Otro</label>
+                        <input type="url" class="form-control" name="cv_url" placeholder="https://linkedin.com/in/...">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Candidato</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
