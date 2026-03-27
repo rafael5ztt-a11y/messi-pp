@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- State & Routing ---
-    const navButtons = document.querySelectorAll('.nav-btn[data-view]');
+    const navButtons = document.querySelectorAll('.nav-item[data-view]');
     const viewSections = document.querySelectorAll('.view-section');
 
     function switchView(viewId) {
@@ -149,9 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if(!toastContainer) return;
         const toast = document.createElement('div');
         toast.className = `toast`;
-        if (type === 'primary') toast.style.borderLeftColor = 'var(--primary)';
         
-        toast.innerHTML = `<i class="fa-solid ${icon}" style="color: var(--${type}); font-size: 18px;"></i> <span>${message}</span>`;
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
         toastContainer.appendChild(toast);
         
         setTimeout(() => {
@@ -182,23 +181,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'candidate-card';
             card.innerHTML = `
-                <div class="candidate-header-wrap">
-                    <img src="https://i.pravatar.cc/150?u=${c.email}" alt="Avatar" class="candidate-avatar">
-                    <div class="candidate-info">
-                        <h4>${c.nombre}</h4>
-                        <p>${c.email}</p>
+                <div class="c-head">
+                    <div class="c-profile">
+                        <img src="https://i.pravatar.cc/150?u=${c.email}" alt="Avatar" class="c-avatar">
+                        <div class="c-info">
+                            <h4>${c.nombre}</h4>
+                            <p>${c.email}</p>
+                        </div>
                     </div>
-                    <div class="score-badge ${scoreClass}">${c.score}%</div>
+                    <div class="c-score ${scoreClass}">${c.score}%</div>
                 </div>
-                <div class="card-skills">
+                <div class="c-skills">
                     ${skillsHtml}
                 </div>
-                <div class="card-footer">
-                    <span class="status-badge status-${c.estado}">${c.estado.charAt(0).toUpperCase() + c.estado.slice(1)}</span>
-                    <div class="card-actions">
-                        <button class="icon-btn" title="Añadir Nota"><i class="fa-regular fa-comment"></i></button>
-                        <button class="icon-btn" title="Editar"><i class="fa-solid fa-pen"></i></button>
-                    </div>
+                <div class="c-footer">
+                    <span class="c-status" style="color: ${c.estado === 'contratado' ? 'var(--success)' : c.estado === 'entrevista' ? '#3B82F6' : 'var(--text-muted)'}">${c.estado}</span>
                 </div>
             `;
             grid.appendChild(card);

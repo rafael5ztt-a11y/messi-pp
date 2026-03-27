@@ -2,222 +2,193 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HiringPro - HR Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HiringApp Mobile</title>
+    <meta name="theme-color" content="#ffffff">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Decorators -->
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div class="bg-orb orb-3"></div>
 
     <!-- Login Screen -->
     <div id="login-container" class="login-container active">
-        <div class="login-card">
-            <div class="login-image"></div>
-            <div class="login-content">
-                <div class="logo justify-center mb-6">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span>HiringPro</span>
+        <div class="login-header">
+            <div class="login-icon"><i class="fa-solid fa-briefcase"></i></div>
+            <h1>HiringApp</h1>
+            <p>El portal móvil para reclutadores</p>
+        </div>
+        
+        <div class="login-box">
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="nombre@empresa.com" required>
                 </div>
-                <h2>Acceso Reclutadores</h2>
-                <p class="text-muted mb-0" style="color: var(--text-muted); font-size: 14px;">Ingresa tus credenciales</p>
-                <form id="login-form">
-                    <div class="form-group">
-                        <label>Correo Electrónico</label>
-                        <input type="email" id="login-email" class="form-control" placeholder="nombre@empresa.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña</label>
-                        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 justify-center" style="margin-top: 16px;">Ingresar al Dashboard</button>
-                </form>
-                <p style="margin-top: 24px; font-size: 12px; color: var(--text-muted);">Por ahora (Demo): Ingresa cualquier dato.</p>
-            </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+            </form>
+            <p class="demo-text">Modo Demo Local: Cualquier dato funciona.</p>
         </div>
     </div>
 
+    <!-- Main App Container -->
     <div id="app-container" class="app-container">
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- Mobile App Header -->
-            <header class="top-header mobile-header">
-                <div class="logo">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span>HiringPro</span>
-                </div>
-                <div class="header-actions">
-                    <button class="icon-btn logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
-                </div>
-            </header>
-
-            <div class="view-container">
-                <!-- Dashboard View -->
-                <section id="view-dashboard" class="view-section active">
-                    <div class="page-header">
-                        <h2>Panel General</h2>
-                        <p>Resumen de reclutamiento</p>
-                    </div>
-                    
-                    <!-- KPI Cards -->
-                    <div class="kpi-grid">
-                        <div class="kpi-card">
-                            <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
-                            <div class="kpi-details">
-                                <span class="kpi-value">24</span>
-                                <span class="kpi-label">Candidatos Activos</span>
-                            </div>
-                        </div>
-                        <div class="kpi-card">
-                            <div class="kpi-icon blue"><i class="fa-solid fa-calendar-check"></i></div>
-                            <div class="kpi-details">
-                                <span class="kpi-value">8</span>
-                                <span class="kpi-label">Entrevistas Pendientes</span>
-                            </div>
-                        </div>
-                        <div class="kpi-card">
-                            <div class="kpi-icon green"><i class="fa-solid fa-clipboard-check"></i></div>
-                            <div class="kpi-details">
-                                <span class="kpi-value">12</span>
-                                <span class="kpi-label">Contratados</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Candidates View -->
-                <section id="view-candidates" class="view-section">
-                    <div class="page-header mobile-page-header">
-                        <h2>Candidatos</h2>
-                    </div>
-                    
-                    <button class="fab-btn" id="btn-add-candidate"><i class="fa-solid fa-plus"></i></button>
-
-                    <div class="mobile-search-bar">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" class="header-search-input" placeholder="Nombres o habilidades...">
-                    </div>
-
-                    <div class="filters-bar">
-                        <select class="form-control filter-select">
-                            <option value="">Filtro: Todos</option>
-                            <option value="aplicado">Aplicado</option>
-                            <option value="entrevista">Entrevista</option>
-                            <option value="contratado">Contratado</option>
-                        </select>
-                        <select class="form-control filter-select">
-                            <option value="">Score (↑)</option>
-                            <option value="asc">Score (↓)</option>
-                        </select>
-                    </div>
-
-                    <div class="candidates-grid" id="candidates-grid">
-                        <div class="content-panel" style="grid-column: 1 / -1;">
-                            <p class="empty-state">No hay candidatos.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Interviews View -->
-                <section id="view-interviews" class="view-section">
-                    <div class="page-header">
-                        <h2>Entrevistas Programadas</h2>
-                        <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Agendar Entrevista</button>
-                    </div>
-                    
-                    <div class="content-panel glass-panel">
-                        <div class="interviews-list">
-                            <div class="interview-item">
-                                <div class="interview-time">
-                                    <span class="time-day">28</span>
-                                    <span class="time-month">MAR</span>
-                                </div>
-                                <div class="interview-details">
-                                    <h4>Entrevista Técnica: Ana García</h4>
-                                    <p><i class="fa-regular fa-clock"></i> 10:00 AM - 11:30 AM | <i class="fa-solid fa-video"></i> Link de Google Meet</p>
-                                </div>
-                                <div class="interview-actions">
-                                    <button class="btn btn-outline">Unirse</button>
-                                </div>
-                            </div>
-                            <div class="interview-item">
-                                <div class="interview-time">
-                                    <span class="time-day">30</span>
-                                    <span class="time-month">MAR</span>
-                                </div>
-                                <div class="interview-details">
-                                    <h4>Evaluación Cultural: Carlos Ruiz</h4>
-                                    <p><i class="fa-regular fa-clock"></i> 02:00 PM - 02:45 PM | <i class="fa-solid fa-building"></i> Oficina Central</p>
-                                </div>
-                                <div class="interview-actions">
-                                    <button class="btn btn-outline">Unirse</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+        
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-layer-group"></i>
+                HiringApp
             </div>
-            
-            <!-- Bottom Navigation Bar for Mobile -->
-            <nav class="bottom-nav">
-                <button class="nav-btn active" data-view="dashboard">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <span>Inicio</span>
-                </button>
-                <button class="nav-btn" data-view="candidates">
-                    <i class="fa-solid fa-users"></i>
-                    <span>Candidatos</span>
-                </button>
-                <button class="nav-btn" data-view="interviews">
-                    <i class="fa-solid fa-calendar-check"></i>
-                    <span>Agenda</span>
-                </button>
-            </nav>
+            <button class="icon-btn logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </header>
+
+        <main class="view-container">
+            <!-- DASHBOARD VIEW -->
+            <section id="view-dashboard" class="view-section active">
+                <div class="page-title">
+                    <h2>Panel de Control</h2>
+                    <p>Resumen de tu semana</p>
+                </div>
+                
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon blue"><i class="fa-solid fa-users"></i></div>
+                        <div class="kpi-data">
+                            <span class="kpi-value">0</span>
+                            <span class="kpi-label">Activos</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon purple"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div class="kpi-data">
+                            <span class="kpi-value">0</span>
+                            <span class="kpi-label">Entrevistas</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card full-width">
+                        <div class="kpi-icon green"><i class="fa-solid fa-clipboard-check"></i></div>
+                        <div class="kpi-data horizontal">
+                            <span class="kpi-label">Aceptados y Contratados</span>
+                            <span class="kpi-value">0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CANDIDATES VIEW -->
+            <section id="view-candidates" class="view-section">
+                <div class="page-title">
+                    <h2>Candidatos</h2>
+                </div>
+                
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="header-search-input" placeholder="Buscar por nombre o skill...">
+                </div>
+
+                <div class="filters-scroll">
+                    <select class="filter-select badge-select">
+                        <option value="">Status: Todos</option>
+                        <option value="aplicado">Aplicado</option>
+                        <option value="entrevista">Entrevista</option>
+                        <option value="contratado">Contratado</option>
+                    </select>
+                    <select class="filter-select badge-select">
+                        <option value="">Score ↓</option>
+                        <option value="asc">Score ↑</option>
+                    </select>
+                </div>
+
+                <div class="candidates-grid" id="candidates-grid">
+                    <!-- Cards injected by JS -->
+                </div>
+                
+                <button class="fab-btn" id="btn-add-candidate"><i class="fa-solid fa-plus"></i></button>
+            </section>
+
+            <!-- INTERVIEWS VIEW -->
+            <section id="view-interviews" class="view-section">
+                <div class="page-title">
+                    <h2>Agenda</h2>
+                    <button class="btn btn-sm btn-outline"><i class="fa-solid fa-plus"></i> Nueva</button>
+                </div>
+                
+                <div class="interviews-list">
+                    <div class="interview-card">
+                        <div class="int-date">
+                            <span class="int-day">28</span>
+                            <span class="int-month">MAR</span>
+                        </div>
+                        <div class="int-info">
+                            <h4>Entrevista Técnica</h4>
+                            <p>Ana García • 10:00 AM</p>
+                        </div>
+                        <button class="icon-btn action-btn"><i class="fa-solid fa-video"></i></button>
+                    </div>
+                    <div class="interview-card">
+                        <div class="int-date">
+                            <span class="int-day">30</span>
+                            <span class="int-month">MAR</span>
+                        </div>
+                        <div class="int-info">
+                            <h4>Prueba Cultural</h4>
+                            <p>Carlos Ruiz • 02:00 PM</p>
+                        </div>
+                        <button class="icon-btn action-btn"><i class="fa-solid fa-location-dot"></i></button>
+                    </div>
+                </div>
+            </section>
         </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-view="dashboard">
+                <div class="nav-icon"><i class="fa-solid fa-house"></i></div>
+                <span>Inicio</span>
+            </button>
+            <button class="nav-item" data-view="candidates">
+                <div class="nav-icon"><i class="fa-solid fa-users"></i></div>
+                <span>Candidatos</span>
+            </button>
+            <button class="nav-item" data-view="interviews">
+                <div class="nav-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                <span>Agenda</span>
+            </button>
+        </nav>
     </div>
 
-    <!-- Candidate Modal (Slide up) -->
-    <div class="modal" id="candidate-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Añadir Candidato</h3>
+    <!-- Candidate Modal -->
+    <div class="sheet-modal" id="candidate-modal">
+        <div class="sheet-content">
+            <div class="sheet-header">
+                <h3>Nuevo Candidato</h3>
                 <button class="icon-btn close-modal"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="modal-body">
+            <div class="sheet-body">
                 <form id="candidate-form">
                     <div class="form-group">
                         <label>Nombre Completo</label>
-                        <input type="text" class="form-control" name="nombre" required>
+                        <input type="text" class="form-control" name="nombre" placeholder="Ej. Juan Pérez" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" class="form-control" name="email" placeholder="juan@email.com" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Teléfono</label>
-                            <input type="text" class="form-control" name="telefono">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Años de Experiencia</label>
-                            <input type="number" class="form-control" name="experiencia" min="0" required>
+                            <label>Experiencia (Años)</label>
+                            <input type="number" class="form-control" name="experiencia" min="0" value="0" required>
                         </div>
                         <div class="form-group">
                             <label>Estado</label>
@@ -229,17 +200,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Habilidades Clave (separadas por coma)</label>
-                        <input type="text" class="form-control" name="skills" placeholder="Ej: React, Node.js, Liderazgo" required>
+                        <label>Habilidades Clave</label>
+                        <input type="text" class="form-control" name="skills" placeholder="Ej. React, Figma, Liderazgo" required>
                     </div>
-                    <div class="form-group">
-                        <label>Enlace CV u Otro</label>
-                        <input type="url" class="form-control" name="cv_url" placeholder="https://linkedin.com/in/...">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn close-modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar Candidato</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary btn-block mt-4">Guardar Candidato</button>
                 </form>
             </div>
         </div>
@@ -247,6 +211,7 @@
 
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
+    
     <script src="script.js"></script>
 </body>
 </html>
