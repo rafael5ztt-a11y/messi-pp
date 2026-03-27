@@ -21,7 +21,7 @@
     <!-- Login Screen -->
     <div id="login-container" class="login-container active">
         <div class="login-header">
-            <div class="login-icon"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="login-icon ripple"><i class="fa-solid fa-briefcase"></i></div>
             <h1>HiringApp</h1>
             <p>El portal móvil para reclutadores</p>
         </div>
@@ -47,10 +47,9 @@
         
         <header class="app-header">
             <div class="logo">
-                <i class="fa-solid fa-layer-group"></i>
                 HiringApp
             </div>
-            <button class="icon-btn logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            <button class="neu-btn ripple" id="btn-settings"><i class="fa-solid fa-gear"></i></button>
         </header>
 
         <main class="view-container">
@@ -62,39 +61,35 @@
                 </div>
                 
                 <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-icon blue"><i class="fa-solid fa-users"></i></div>
-                        <div class="kpi-data">
-                            <span class="kpi-value">0</span>
-                            <span class="kpi-label">Activos</span>
-                        </div>
+                    <div class="neu-card kpi-card ripple">
+                        <div class="n-icon-well blue"><i class="fa-solid fa-users"></i></div>
+                        <div class="n-value">0</div>
+                        <div class="n-label">Activos</div>
                     </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon purple"><i class="fa-solid fa-calendar-check"></i></div>
-                        <div class="kpi-data">
-                            <span class="kpi-value">0</span>
-                            <span class="kpi-label">Entrevistas</span>
-                        </div>
+                    <div class="neu-card kpi-card ripple">
+                        <div class="n-icon-well purple"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div class="n-value">0</div>
+                        <div class="n-label">Entrevistas</div>
                     </div>
-                    <div class="kpi-card full-width">
-                        <div class="kpi-icon green"><i class="fa-solid fa-clipboard-check"></i></div>
-                        <div class="kpi-data horizontal">
-                            <span class="kpi-label">Aceptados y Contratados</span>
-                            <span class="kpi-value">0</span>
+                    <div class="neu-card kpi-card full-width ripple">
+                        <div class="n-icon-badge">
+                            <i class="fa-solid fa-check"></i>
                         </div>
+                        <div class="n-value">0</div>
+                        <div class="n-label" style="margin-top:4px;">Aceptados y Contratados</div>
                     </div>
                 </div>
             </section>
 
             <!-- CANDIDATES VIEW -->
             <section id="view-candidates" class="view-section">
-                <div class="page-title">
+                <div class="page-title" style="margin-bottom: 20px;">
                     <h2>Candidatos</h2>
                 </div>
                 
-                <div class="search-box">
+                <div class="neu-well neu-search">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" class="header-search-input" placeholder="Buscar por nombre o skill...">
+                    <input type="text" class="header-search-input" placeholder="Buscar candidat@s...">
                 </div>
 
                 <div class="filters-scroll">
@@ -117,35 +112,80 @@
                 <button class="fab-btn" id="btn-add-candidate"><i class="fa-solid fa-plus"></i></button>
             </section>
 
+            <!-- SETTINGS VIEW -->
+            <section id="view-settings" class="view-section">
+                <div class="page-title" style="margin-bottom: 24px;">
+                    <h2>Ajustes</h2>
+                    <p>Personaliza tu experiencia</p>
+                </div>
+                
+                <div class="neu-card" style="margin-bottom:24px;">
+                    <h4 style="margin-bottom:20px; font-weight:800; color:var(--text-muted); font-size:14px;">TEMA Y COLORES</h4>
+                    
+                    <div class="theme-grid">
+                        <button class="theme-btn ripple" data-theme="light">
+                            <div class="theme-color" style="background:#E9EFF6;"></div>
+                            <span>Por Defecto</span>
+                        </button>
+                        <button class="theme-btn ripple" data-theme="dark">
+                            <div class="theme-color" style="background:#2A2F35;"></div>
+                            <span>Modo Oscuro</span>
+                        </button>
+                        <button class="theme-btn ripple" data-theme="ocean">
+                            <div class="theme-color" style="background:#E0F2FE;"></div>
+                            <span>Océano Claro</span>
+                        </button>
+                        <button class="theme-btn ripple" data-theme="sand">
+                            <div class="theme-color" style="background:#F4EBE1;"></div>
+                            <span>Arena Suave</span>
+                        </button>
+                        <button class="theme-btn ripple" data-theme="cherry">
+                            <div class="theme-color" style="background:#FCE7F3;"></div>
+                            <span>Fresa Pastel</span>
+                        </button>
+                        <button class="theme-btn ripple" data-theme="cyber">
+                            <div class="theme-color" style="background:#0F172A;"></div>
+                            <span>Cyberpunk Neón</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="neu-card">
+                    <h4 style="margin-bottom:20px; font-weight:800; color:var(--text-muted); font-size:14px;">CUENTA</h4>
+                    <button class="btn-primary logout-btn ripple" style="background:var(--brand-red); color:white; width:100%;">Cerrar Sesión</button>
+                </div>
+            </section>
+
             <!-- INTERVIEWS VIEW -->
             <section id="view-interviews" class="view-section">
-                <div class="page-title">
+                <div class="page-title" style="margin-bottom: 24px;">
                     <h2>Agenda</h2>
-                    <button class="btn btn-sm btn-outline"><i class="fa-solid fa-plus"></i> Nueva</button>
+                    <p>Próximas entrevistas</p>
                 </div>
                 
                 <div class="interviews-list">
-                    <div class="interview-card">
-                        <div class="int-date">
-                            <span class="int-day">28</span>
-                            <span class="int-month">MAR</span>
+                    <div class="neu-card ripple" style="display:flex; align-items:center; gap:20px; padding:20px; margin-bottom:16px;">
+                        <div class="neu-well" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:70px; height:70px; padding:0;">
+                            <span style="font-size:24px; font-weight:800; color:var(--text-dark); line-height:1;">28</span>
+                            <span style="font-size:12px; font-weight:800; color:var(--brand-purple);">MAR</span>
                         </div>
-                        <div class="int-info">
-                            <h4>Entrevista Técnica</h4>
-                            <p>Ana García • 10:00 AM</p>
+                        <div style="flex:1;">
+                            <h4 style="font-size:16px; font-weight:800; color:var(--text-dark); margin-bottom:4px;">Entrevista Técnica</h4>
+                            <p style="font-size:13px; font-weight:600; color:var(--text-muted);">Ana García • 10:00 AM</p>
                         </div>
-                        <button class="icon-btn action-btn"><i class="fa-solid fa-video"></i></button>
+                        <button class="neu-btn" style="color:var(--brand-blue);"><i class="fa-solid fa-video"></i></button>
                     </div>
-                    <div class="interview-card">
-                        <div class="int-date">
-                            <span class="int-day">30</span>
-                            <span class="int-month">MAR</span>
+
+                    <div class="neu-card ripple" style="display:flex; align-items:center; gap:20px; padding:20px; margin-bottom:16px;">
+                        <div class="neu-well" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:70px; height:70px; padding:0;">
+                            <span style="font-size:24px; font-weight:800; color:var(--text-dark); line-height:1;">30</span>
+                            <span style="font-size:12px; font-weight:800; color:var(--brand-blue);">MAR</span>
                         </div>
-                        <div class="int-info">
-                            <h4>Prueba Cultural</h4>
-                            <p>Carlos Ruiz • 02:00 PM</p>
+                        <div style="flex:1;">
+                            <h4 style="font-size:16px; font-weight:800; color:var(--text-dark); margin-bottom:4px;">Prueba Cultural</h4>
+                            <p style="font-size:13px; font-weight:600; color:var(--text-muted);">Carlos Ruiz • 02:00 PM</p>
                         </div>
-                        <button class="icon-btn action-btn"><i class="fa-solid fa-location-dot"></i></button>
+                        <button class="neu-btn" style="color:var(--brand-green);"><i class="fa-solid fa-location-dot"></i></button>
                     </div>
                 </div>
             </section>
@@ -171,9 +211,9 @@
     <!-- Candidate Modal -->
     <div class="sheet-modal" id="candidate-modal">
         <div class="sheet-content">
+            <div class="drag-handle"></div>
             <div class="sheet-header">
                 <h3>Nuevo Candidato</h3>
-                <button class="icon-btn close-modal"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="sheet-body">
                 <form id="candidate-form">
@@ -212,6 +252,21 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
     
+    <!-- Candidate Detail Page (Slide in) -->
+    <div id="candidate-detail" class="detail-page">
+        <header class="detail-header">
+            <button class="neu-btn back-btn ripple" id="close-detail-btn"><i class="fa-solid fa-chevron-left" style="margin-right:2px;"></i></button>
+            <div class="detail-actions" style="display:flex; gap:12px;">
+                <button class="neu-btn ripple"><i class="fa-solid fa-ellipsis"></i></button>
+            </div>
+        </header>
+        <div class="detail-content" id="detail-content">
+            <!-- Details injected via JS -->
+        </div>
+    </div>
+    
+    <!-- Confetti JS for visual effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginContainer = document.getElementById('login-container');
     const appContainer = document.getElementById('app-container');
     const loginForm = document.getElementById('login-form');
-    const logoutBtn = document.querySelector('.logout-btn');
 
     // Start App hidden, Login shown
     appContainer.style.display = 'none';
@@ -18,15 +17,40 @@ document.addEventListener('DOMContentLoaded', () => {
         appContainer.style.display = 'flex';
     });
 
-    logoutBtn.addEventListener('click', () => {
-        appContainer.style.display = 'none';
-        loginContainer.classList.add('active');
-        loginForm.reset();
+    // Delegate logout since button is in settings now
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.logout-btn')) {
+            appContainer.style.display = 'none';
+            loginContainer.classList.add('active');
+            loginForm.reset();
+            
+            // Optional: reset view to dashboard on logout
+            const navButtons = document.querySelectorAll('.nav-item[data-view]');
+            navButtons.forEach(b => {
+                if (b.dataset.view === 'dashboard') b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            const viewSections = document.querySelectorAll('.view-section');
+            viewSections.forEach(section => {
+                if (section.id === 'view-dashboard') section.classList.add('active');
+                else section.classList.remove('active');
+            });
+        }
     });
 
     // --- State & Routing ---
     const navButtons = document.querySelectorAll('.nav-item[data-view]');
     const viewSections = document.querySelectorAll('.view-section');
+    
+    // Header Setting button routing
+    const btnSettings = document.getElementById('btn-settings');
+    if(btnSettings) {
+        btnSettings.addEventListener('click', () => {
+            switchView('settings');
+            // Remove active state from bottom nav
+            navButtons.forEach(b => b.classList.remove('active'));
+        });
+    }
 
     function switchView(viewId) {
         // Update active nav button
@@ -143,6 +167,57 @@ document.addEventListener('DOMContentLoaded', () => {
     
     loadFromLocalStorage();
 
+    // --- Slide-over Detail View ---
+    const detailPage = document.getElementById('candidate-detail');
+    const detailContent = document.getElementById('detail-content');
+    const closeDetailBtn = document.getElementById('close-detail-btn');
+
+    if(closeDetailBtn) {
+        closeDetailBtn.addEventListener('click', () => {
+            detailPage.classList.remove('active');
+        });
+    }
+
+    function openCandidateDetail(c) {
+        detailContent.innerHTML = `
+            <img src="https://i.pravatar.cc/150?u=${c.email}" alt="Avatar" class="d-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${c.nombre}'">
+            <h2 class="d-name">${c.nombre}</h2>
+            <p class="d-email">${c.email}</p>
+            
+            <div class="d-actions-row">
+                <button class="neu-btn ripple" style="width:64px; height:64px; font-size:24px; color:var(--brand-blue); border-radius:32px;"><i class="fa-solid fa-phone"></i></button>
+                <button class="neu-btn ripple" style="width:64px; height:64px; font-size:24px; color:var(--brand-purple); border-radius:32px;"><i class="fa-regular fa-envelope"></i></button>
+                <button class="neu-btn ripple" style="width:64px; height:64px; font-size:24px; color:var(--brand-green); border-radius:32px;"><i class="fa-regular fa-calendar-check"></i></button>
+            </div>
+            
+            <div class="neu-card ripple" style="margin-bottom:24px; padding:20px;">
+                <h4 style="margin-bottom:16px; font-size:16px; font-weight:800; color:var(--text-muted);">ESTADO DEL PROCESO</h4>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="c-status" style="font-size:20px; color: ${c.estado === 'contratado' ? 'var(--brand-green)' : c.estado === 'entrevista' ? 'var(--brand-blue)' : 'var(--text-dark)'}">${c.estado}</span>
+                    <span class="c-score ${c.score < 50 ? 'low' : ''}" style="box-shadow:inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light); background:transparent;">${c.score}% Match</span>
+                </div>
+            </div>
+            
+            <div class="neu-card ripple" style="margin-bottom:24px; padding:20px;">
+                <h4 style="margin-bottom:12px; font-size:16px; font-weight:800; color:var(--text-muted);">EXPERIENCIA</h4>
+                <p style="font-size:28px; font-weight:800; color:var(--text-dark);">${c.experiencia} Años</p>
+            </div>
+            
+            <div class="neu-card ripple" style="margin-bottom:30px; padding:20px;">
+                <h4 style="margin-bottom:16px; font-size:16px; font-weight:800; color:var(--text-muted);">HABILIDADES DESTACADAS</h4>
+                <div class="c-skills">
+                    ${c.skills.split(',').map(s => `<span class="c-skill">${s.trim()}</span>`).join('')}
+                </div>
+            </div>
+            
+            ${c.estado === 'contratado' ? 
+              `<button class="btn-primary ripple mt-4" style="background:var(--brand-green);" onclick="confetti({particleCount: 150, spread: 70, origin: { y: 0.6 }})">
+                  <i class="fa-solid fa-party-horn"></i> 🎉 Contratado
+              </button>` : ''}
+        `;
+        detailPage.classList.add('active');
+    }
+
     // --- Toast System ---
     const toastContainer = document.getElementById('toast-container');
     function showToast(message, icon = 'fa-check-circle', type = 'success') {
@@ -159,6 +234,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
     
+    // --- Themes ---
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    const savedTheme = localStorage.getItem('hiring_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    themeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const theme = btn.dataset.theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('hiring_theme', theme);
+            showToast('Tema aplicado', 'fa-palette', 'primary');
+        });
+    });
+
     // Attach to Login
     loginForm.addEventListener('submit', (e) => {
         // e.preventDefault already applied further up, but just in case:
@@ -168,18 +257,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('candidates-grid');
     
     function renderCandidates(listaACargar = candidatos) {
+        grid.innerHTML = '';
+        
         if (listaACargar.length === 0) {
-            grid.innerHTML = '<div class="content-panel" style="grid-column: 1 / -1;"><p class="empty-state">No hay candidatos que coincidan con la búsqueda.</p></div>';
+            grid.innerHTML = `
+                <div style="text-align:center; padding: 60px 20px;">
+                    <i class="fa-regular fa-folder-open" style="font-size: 56px; color: #E4E4E7; margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--text-muted); font-size:16px; font-weight:600;">Sin resultados</h3>
+                </div>`;
             return;
         }
-        
-        grid.innerHTML = '';
+
         listaACargar.forEach(c => {
             const skillsHtml = c.skills.split(',').map(s => `<span class="skill-tag">${s.trim()}</span>`).join('');
             const scoreClass = c.score < 50 ? 'low' : '';
             
             const card = document.createElement('div');
-            card.className = 'candidate-card';
+            card.className = 'candidate-card neu-card ripple';
             card.innerHTML = `
                 <div class="c-head">
                     <div class="c-profile">
@@ -198,6 +292,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="c-status" style="color: ${c.estado === 'contratado' ? 'var(--success)' : c.estado === 'entrevista' ? '#3B82F6' : 'var(--text-muted)'}">${c.estado}</span>
                 </div>
             `;
+            
+            // Interaction: Open Details
+            card.addEventListener('click', () => openCandidateDetail(c));
+            
             grid.appendChild(card);
         });
         
@@ -218,9 +316,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Update Dashboard KPIs globally based on 'candidatos' array, not the filtered list
-        document.querySelectorAll('.kpi-value')[0].textContent = candidatos.length;
-        document.querySelectorAll('.kpi-value')[1].textContent = candidatos.filter(c => c.estado === 'entrevista').length;
-        document.querySelectorAll('.kpi-value')[2].textContent = candidatos.filter(c => c.estado === 'contratado').length;
+        const valElements = document.querySelectorAll('.n-value');
+        if(valElements.length >= 3) {
+            valElements[0].textContent = candidatos.length;
+            valElements[1].textContent = candidatos.filter(c => c.estado === 'entrevista').length;
+            valElements[2].textContent = candidatos.filter(c => c.estado === 'contratado').length;
+        }
     }
 
     // --- Search & Filters ---
@@ -282,6 +383,17 @@ document.addEventListener('DOMContentLoaded', () => {
         handleFilters(); // Render with current filters applied
         closeModal();
         showToast('Candidato registrado con éxito', 'fa-user-check', 'primary');
+        
+        // Confetti explosion if hired!
+        if (newCandidate.estado === 'contratado' && window.confetti) {
+            confetti({
+                particleCount: 150,
+                spread: 80,
+                origin: { y: 0.4 },
+                zIndex: 10000,
+                colors: ['#3B82F6', '#10B981', '#F59E0B']
+            });
+        }
     });
 
 });
