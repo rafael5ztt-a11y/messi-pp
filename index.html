@@ -53,41 +53,16 @@
     </div>
 
     <div id="app-container" class="app-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Mobile App Header -->
+            <header class="top-header mobile-header">
                 <div class="logo">
                     <i class="fa-solid fa-layer-group"></i>
                     <span>HiringPro</span>
                 </div>
-            </div>
-            <nav class="sidebar-nav">
-                <ul id="nav-list">
-                    <li><button class="nav-btn active" data-view="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button></li>
-                    <li><button class="nav-btn" data-view="candidates"><i class="fa-solid fa-users"></i> Candidatos</button></li>
-                    <li><button class="nav-btn" data-view="interviews"><i class="fa-solid fa-calendar-check"></i> Entrevistas</button></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <button class="nav-btn" data-view="settings"><i class="fa-solid fa-gear"></i> Configuración</button>
-                <button class="nav-btn logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</button>
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <header class="top-header">
-                <button class="icon-btn" id="menu-toggle" style="display: none;"><i class="fa-solid fa-bars"></i></button>
-                <div class="header-search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Buscar candidatos, habilidades...">
-                </div>
                 <div class="header-actions">
-                    <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
-                    <div class="user-profile">
-                        <div class="avatar">R</div>
-                        <span class="user-name">Reclutador</span>
-                    </div>
+                    <button class="icon-btn logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
                 </div>
             </header>
 
@@ -127,27 +102,33 @@
 
                 <!-- Candidates View -->
                 <section id="view-candidates" class="view-section">
-                    <div class="page-header">
-                        <h2>Gestión de Candidatos</h2>
-                        <button class="btn btn-primary" id="btn-add-candidate"><i class="fa-solid fa-plus"></i> Nuevo Candidato</button>
+                    <div class="page-header mobile-page-header">
+                        <h2>Candidatos</h2>
+                    </div>
+                    
+                    <button class="fab-btn" id="btn-add-candidate"><i class="fa-solid fa-plus"></i></button>
+
+                    <div class="mobile-search-bar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" class="header-search-input" placeholder="Nombres o habilidades...">
                     </div>
 
                     <div class="filters-bar">
                         <select class="form-control filter-select">
-                            <option value="">Todos los estados</option>
+                            <option value="">Filtro: Todos</option>
                             <option value="aplicado">Aplicado</option>
                             <option value="entrevista">Entrevista</option>
                             <option value="contratado">Contratado</option>
                         </select>
                         <select class="form-control filter-select">
-                            <option value="">Score (Mayor a Menor)</option>
-                            <option value="asc">Score (Menor a Mayor)</option>
+                            <option value="">Score (↑)</option>
+                            <option value="asc">Score (↓)</option>
                         </select>
                     </div>
 
                     <div class="candidates-grid" id="candidates-grid">
                         <div class="content-panel" style="grid-column: 1 / -1;">
-                            <p class="empty-state">No hay candidatos para mostrar. Agrega el primero.</p>
+                            <p class="empty-state">No hay candidatos.</p>
                         </div>
                     </div>
                 </section>
@@ -190,23 +171,27 @@
                         </div>
                     </div>
                 </section>
-                
-                <!-- Settings View -->
-                <section id="view-settings" class="view-section">
-                    <div class="page-header">
-                        <h2>Configuración</h2>
-                    </div>
-                    <div class="content-panel">
-                        <h3>Conexión Supabase</h3>
-                        <p>Configura las credenciales de tu base de datos aquí.</p>
-                        <!-- Form for settings later -->
-                    </div>
-                </section>
             </div>
+            
+            <!-- Bottom Navigation Bar for Mobile -->
+            <nav class="bottom-nav">
+                <button class="nav-btn active" data-view="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Inicio</span>
+                </button>
+                <button class="nav-btn" data-view="candidates">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Candidatos</span>
+                </button>
+                <button class="nav-btn" data-view="interviews">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Agenda</span>
+                </button>
+            </nav>
         </main>
     </div>
 
-    <!-- Candidate Modal -->
+    <!-- Candidate Modal (Slide up) -->
     <div class="modal" id="candidate-modal">
         <div class="modal-content">
             <div class="modal-header">

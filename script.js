@@ -27,14 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- State & Routing ---
     const navButtons = document.querySelectorAll('.nav-btn[data-view]');
     const viewSections = document.querySelectorAll('.view-section');
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-
-    if(menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
-    }
 
     function switchView(viewId) {
         // Update active nav button
@@ -54,11 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 section.classList.remove('active');
             }
         });
-        
-        // Close sidebar on mobile after clicking
-        if (window.innerWidth <= 768 && sidebar) {
-            sidebar.classList.remove('open');
-        }
     }
 
     // Attach click listeners to nav buttons
@@ -240,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Search & Filters ---
-    const searchInput = document.querySelector('.header-search input');
+    const searchInput = document.querySelector('.header-search-input');
     const statusFilter = document.querySelectorAll('.filter-select')[0];
     const scoreFilter = document.querySelectorAll('.filter-select')[1];
 
